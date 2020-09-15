@@ -21,6 +21,27 @@ describe("/api", () => {
           });
         });
     });
+    describe("/children", () => {
+      it("200 GET list of children by parent", () => {
+        return request(app)
+          .get("/api/parents/c@outlook.com/children")
+          .expect(200)
+          .then((res) => {
+            res.body.children.forEach((child) => {
+     
+              expect(child.parent_email).toBe("c@outlook.com");
+              expect(Object.keys(child)).toEqual([
+                "child_id",
+                "login_code",
+                "child_name",
+                "parent_email",
+                "star_count",
+              ]);
+            });
+          });
+      });
+    });
   });
+
   describe("/children", () => {});
 });
