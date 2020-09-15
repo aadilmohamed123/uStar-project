@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "setup-dbs": "psql -f ./db/setup.sql",
+    "seed": "knex seed:run",
+    "seed-test": "NODE_ENV=test knex seed:run" ,
     "test": "jest --watch",
     "nodemon": "nodemon app.js",
     "migrate-make": "knex migrate:make",
