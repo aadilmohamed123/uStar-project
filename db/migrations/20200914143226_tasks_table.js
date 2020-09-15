@@ -6,7 +6,7 @@ exports.up = function (knex) {
     tasksTable.integer("child_id").references("children.child_id");
     tasksTable.string("task_description").notNullable();
     tasksTable.string("task_status").notNullable().defaultsTo("outstanding");
-    tasksTable.integer("star_worth").defaultsTo(1);
+    tasksTable.integer("stars_worth").defaultsTo(1);
   });
 };
 
