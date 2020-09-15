@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  console.log("creating parents table");
+  // console.log("creating parents table");
   return knex.schema.createTable("parents", (parentsTable) => {
     parentsTable.string("parent_email").notNullable().primary().unique();
     parentsTable.string("parent_name").notNullable();
@@ -8,7 +8,7 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  console.log("removing parents table");
+  // console.log("removing parents table");
 
   return knex.schema.dropTable("parents");
 };

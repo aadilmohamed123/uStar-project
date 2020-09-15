@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  console.log("creating rewards table");
+  //console.log("creating rewards table");
 
   return knex.schema.createTable("rewards", (rewardsTable) => {
     rewardsTable.increments("reward_id").primary();
@@ -10,6 +10,6 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  console.log("removing rewards table");
+  //console.log("removing rewards table");
   return knex.schema.dropTable("rewards");
 };

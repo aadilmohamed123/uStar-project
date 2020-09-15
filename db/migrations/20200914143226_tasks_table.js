@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-  console.log("creating tasks table");
+  // console.log("creating tasks table");
 
   return knex.schema.createTable("tasks", (tasksTable) => {
     tasksTable.increments("task_id").primary();
@@ -11,6 +11,6 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  console.log("removing tasks table");
+  //console.log("removing tasks table");
   return knex.schema.dropTable("tasks");
 };

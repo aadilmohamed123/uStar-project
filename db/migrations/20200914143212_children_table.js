@@ -1,7 +1,7 @@
 const { randNumFunc } = require("../../utils/utils");
 
 exports.up = function (knex) {
-  console.log("creating children table");
+  // console.log("creating children table");
 
   return knex.schema.createTable("children", (childrenTable) => {
     childrenTable.increments("child_id").primary();
@@ -13,6 +13,6 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-  console.log("removing children table");
+  // console.log("removing children table");
   return knex.schema.dropTable("children");
 };
