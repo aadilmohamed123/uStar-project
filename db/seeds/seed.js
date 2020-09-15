@@ -4,7 +4,7 @@ const {
   tasksData,
   rewardsData,
 } = require("../data/index.js");
-const { makeRefObj, formatData } = require("../../utils/utils");
+const { randNumFunc, makeRefObj, formatData } = require("../../utils/utils");
 
 exports.seed = function (knex) {
   return knex.migrate
@@ -14,6 +14,7 @@ exports.seed = function (knex) {
       return knex("parents").insert(parentsData).returning("*");
     })
     .then(() => {
+      childrenData.forEach((child)=>child.login_code = randNumFunc())
       return knex("children").insert(childrenData).returning("*");
     })
     .then((childrenRows) => {
