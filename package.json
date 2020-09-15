@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ]
+  },
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "knex seed:run",
@@ -31,6 +36,7 @@
   },
   "devDependencies": {
     "jest": "^26.4.2",
+    "jest-extended": "^0.11.5",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2"
   }
