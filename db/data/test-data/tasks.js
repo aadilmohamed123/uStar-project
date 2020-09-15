@@ -3,8 +3,8 @@ module.exports = [
     task_description: "clean room",
     stars_worth: 2,
     task_status: "outstanding",
-    child_name: "kim",
-    parent_email: "b@outlook.com",
+    // child_name: "kim",
+    // parent_email: "b@outlook.com",
   },
   {
     task_description: "do homework",
