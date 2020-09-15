@@ -11,6 +11,39 @@ describe("randNumFunc", () => {
 });
 
 describe("makeRefObj", () => {
+  it("returned object has different reference to  and not mutated", () => {
+    const input = [
+      {
+        child_id: 1,
+        child_name: "Bob",
+        parent_email: "james@outlook.com",
+        star_count: 5,
+      },
+      {
+        child_id: 2,
+        child_name: "Jim",
+        parent_email: "Danny@outlook.com",
+        star_count: 8,
+      },
+    ];
+
+    expect(makeRefObj(input)).not.toBe(input);
+    makeRefObj(input);
+    expect(input).toEqual([
+      {
+        child_id: 1,
+        child_name: "Bob",
+        parent_email: "james@outlook.com",
+        star_count: 5,
+      },
+      {
+        child_id: 2,
+        child_name: "Jim",
+        parent_email: "Danny@outlook.com",
+        star_count: 8,
+      },
+    ]);
+  });
   it("returns one key value pair", () => {
     const children = [
       {
@@ -68,6 +101,52 @@ describe("makeRefObj", () => {
   });
 });
 describe("formatData", () => {
+  it("returned object has different reference to  and not mutated", () => {
+    const input = [
+      {
+        child_id: 1,
+        child_name: "George",
+        parent_email: "james@outlook.com",
+      },
+      {
+        child_id: 2,
+        child_name: "Jessica",
+        parent_email: "james@outlook.com",
+      },
+    ];
+    const data = [
+      {
+        task_description: "do homework",
+        stars_worth: 6,
+        task_status: "pending",
+        child_name: "George",
+        parent_email: "james@outlook.com",
+      },
+      {
+        task_description: "wash car",
+        stars_worth: 10,
+        task_status: "completed",
+        child_name: "Jessica",
+        parent_email: "james@outlook.com",
+      },
+    ];
+
+    expect(formatData(data, makeRefObj(input))).not.toBe(input);
+    formatData(data, makeRefObj(input));
+    expect(input).toEqual([
+      {
+        child_id: 1,
+        child_name: "George",
+        parent_email: "james@outlook.com",
+      },
+      {
+        child_id: 2,
+        child_name: "Jessica",
+        parent_email: "james@outlook.com",
+      },
+    ]);
+  });
+
   it("formats data for single child", () => {
     const children = [
       {
@@ -140,5 +219,4 @@ describe("formatData", () => {
     ];
     expect(formatData(data, makeRefObj(children))).toEqual(output);
   });
-  it("run test data", () => {});
 });

@@ -1,5 +1,5 @@
 exports.randNumFunc = () => {
-  return Math.floor(Math.random() * 10000);
+  return Math.floor(1000 + Math.random() * 9000);
 };
 
 exports.makeRefObj = (children) => {
