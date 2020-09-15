@@ -1,5 +1,3 @@
-const { randNumFunc } = require("../../utils/utils");
-
 exports.up = function (knex) {
   console.log("creating parents table");
   return knex.schema.createTable("parents", (parentsTable) => {
