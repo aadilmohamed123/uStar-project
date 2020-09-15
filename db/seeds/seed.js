@@ -4,6 +4,7 @@ const {
   tasksData,
   rewardsData,
 } = require("../data/index.js");
+const { makeRefObj, formatData } = require("../../utils/utils");
 
 exports.seed = function (knex) {
   return knex.migrate
@@ -15,9 +16,15 @@ exports.seed = function (knex) {
     .then(() => {
       return knex("children").insert(childrenData).returning("*");
     })
-    .then(() => {
-      const tasksInsertion = knex("tasks").insert(tasksData);
-      const rewardsInsertion = knex("rewards").insert(rewardsData);
+    .then((childrenRows) => {
+      const lookUpObj = makeRefObj(childrenRows);
+
+      const tasksInsertion = knex("tasks").insert(
+        formatData(tasksData, lookUpObj)
+      );
+      const rewardsInsertion = knex("rewards").insert(
+        formatData(rewardsData, lookUpObj)
+      );
 
       return Promise.all([tasksInsertion, rewardsInsertion]);
     })
