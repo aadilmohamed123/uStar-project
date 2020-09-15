@@ -20,7 +20,7 @@ exports.formatData = (data, lookupObj) => {
   return data.map((entry) => {
     const newEntry = { ...entry };
     const { parent_email, child_name } = newEntry;
-    
+
     newEntry.child_id = lookupObj[parent_email].find(
       (childObj) => child_name === Object.keys(childObj)[0]
     )[[child_name]];

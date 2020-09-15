@@ -20,7 +20,7 @@ describe("makeRefObj", () => {
       },
     ];
 
-    const output = { ["james@outlook.com"]: [{ Bob: 1 } ]};
+    const output = { ["james@outlook.com"]: [{ Bob: 1 }] };
     expect(makeRefObj(children)).toEqual(output);
   });
   it("returns multiple key value pairs", () => {
@@ -40,32 +40,32 @@ describe("makeRefObj", () => {
     ];
     const output = {
       ["james@outlook.com"]: [{ Bob: 1 }],
-      ["Danny@outlook.com"]: [{ Jim: 2 }]
+      ["Danny@outlook.com"]: [{ Jim: 2 }],
     };
 
     expect(makeRefObj(children)).toEqual(output);
   });
-    it("returns multiple key value pairs with same parents", () => {
-      const children = [
-        {
-          child_id: 1,
-          child_name: "Bob",
-          parent_email: "james@outlook.com",
-          star_count: 5,
-        },
-        {
-          child_id: 2,
-          child_name: "Jim",
-          parent_email: "james@outlook.com",
-          star_count: 8,
-        },
-      ];
-      const output = {
-        ["james@outlook.com"]: [{ Bob: 1 }, { Jim: 2 }]
-      };
+  it("returns multiple key value pairs with same parents", () => {
+    const children = [
+      {
+        child_id: 1,
+        child_name: "Bob",
+        parent_email: "james@outlook.com",
+        star_count: 5,
+      },
+      {
+        child_id: 2,
+        child_name: "Jim",
+        parent_email: "james@outlook.com",
+        star_count: 8,
+      },
+    ];
+    const output = {
+      ["james@outlook.com"]: [{ Bob: 1 }, { Jim: 2 }],
+    };
 
-      expect(makeRefObj(children)).toEqual(output);
-    });
+    expect(makeRefObj(children)).toEqual(output);
+  });
 });
 describe("formatData", () => {
   it("formats data for single child", () => {
@@ -140,4 +140,5 @@ describe("formatData", () => {
     ];
     expect(formatData(data, makeRefObj(children))).toEqual(output);
   });
+  it("run test data", () => {});
 });
