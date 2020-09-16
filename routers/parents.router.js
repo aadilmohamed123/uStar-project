@@ -2,14 +2,19 @@ const parentsRouter = require("express").Router();
 const {
   getAllParents,
   deleteParent,
+  getParentByEmail,
+  postParent,
 } = require("../controllers/parents.controllers");
 const {
   getChildrenByParent,
   postChild,
 } = require("../controllers/children.controllers");
 
-parentsRouter.route("/").get(getAllParents);
-parentsRouter.route("/:parent_email/").delete(deleteParent);
+parentsRouter.route("/").get(getAllParents).post(postParent);
+parentsRouter
+  .route("/:parent_email/")
+  .delete(deleteParent)
+  .get(getParentByEmail);
 parentsRouter
   .route("/:parent_email/children")
   .get(getChildrenByParent)

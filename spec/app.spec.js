@@ -7,7 +7,6 @@ describe("/api", () => {
   beforeEach(() => connection.seed.run());
   // beforeEach(() =>  jest.setTimeout(() => {}, 20000));
 
- 
   afterAll(() => connection.destroy());
   describe("/parents", () => {
     it("200 GET list of parents (admin)", () => {
@@ -24,9 +23,44 @@ describe("/api", () => {
           });
         });
     });
+    it.only("201 POST parent ", () => {
+      return request(app)
+        .post("/api/parents/")
+        .send({ parent_email: "g@outlook.com", parent_name: "g" })
+        .expect(201)
+        .then((res) => {
+          const { parent } = res.body;
+          expect(parent.parent_email).toBe("g@outlook.com");
+          expect(parent.parent_name).toBe("g");
+        });
+    });
     describe("/email", () => {
-      it.only("DELETE 204 parent by email", () => {
-        return request(app).delete("/api/parents/a@outlook.com").expect(204);
+      it("200 GET parent by email", () => {
+        return request(app)
+          .get("/api/parents/a@outlook.com")
+          .expect(200)
+          .then((res) => {
+            const { parent } = res.body;
+            expect(parent.parent_email).toBe("a@outlook.com");
+            expect(parent.parent_name).toBe("a");
+          });
+      });
+
+      it("DELETE 204 parent by email", () => {
+        // only when children of parent are removed
+        return request(app)
+          .delete("/api/parents/f@outlook.com")
+          .expect(204)
+          .then(() => {
+            return request(app)
+              .get("/api/parents")
+              .expect(200)
+              .then((res) => {
+                res.body.parents.forEach((parent) => {
+                  expect(parent.parent_email).not.toBe("f@outlook.com");
+                });
+              });
+          });
       });
       describe("/children", () => {
         it("200 GET list of children by parent", () => {

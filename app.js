@@ -5,10 +5,8 @@ app.use(express.json());
 
 app.use("/api", apiRouter);
 
-
-
 app.use((err, req, res, next) => {
-  if (err) console.log(err);
+  if (err) console.log(err), "ERROR HERE";
 });
 
 // app.listen(9090, () => {
