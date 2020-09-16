@@ -5,6 +5,9 @@ const connection = require("../db/connection");
 
 describe("/api", () => {
   beforeEach(() => connection.seed.run());
+  // beforeEach(() =>  jest.setTimeout(() => {}, 20000));
+
+ 
   afterAll(() => connection.destroy());
   describe("/parents", () => {
     it("200 GET list of parents (admin)", () => {
@@ -21,23 +24,45 @@ describe("/api", () => {
           });
         });
     });
-    describe("/children", () => {
-      it("200 GET list of children by parent", () => {
-        return request(app)
-          .get("/api/parents/c@outlook.com/children")
-          .expect(200)
-          .then((res) => {
-            res.body.children.forEach((child) => {
-              expect(child.parent_email).toBe("c@outlook.com");
-              expect(Object.keys(child)).toEqual([
-                "child_id",
-                "login_code",
-                "child_name",
-                "parent_email",
-                "star_count",
-              ]);
+    describe("/email", () => {
+      it.only("DELETE 204 parent by email", () => {
+        return request(app).delete("/api/parents/a@outlook.com").expect(204);
+      });
+      describe("/children", () => {
+        it("200 GET list of children by parent", () => {
+          return request(app)
+            .get("/api/parents/c@outlook.com/children")
+            .expect(200)
+            .then((res) => {
+              res.body.children.forEach((child) => {
+                expect(child.parent_email).toBe("c@outlook.com");
+                expect(Object.keys(child)).toEqual([
+                  "child_id",
+                  "login_code",
+                  "child_name",
+                  "parent_email",
+                  "star_count",
+                ]);
+              });
             });
-          });
+        });
+        it("POST 201 child to parent account", () => {
+          return request(app)
+            .post("/api/parents/a@outlook.com/children")
+            .send({ child_name: "Selena" })
+            .expect(201)
+            .then((res) => {
+              const { child } = res.body;
+
+              expect(child.child_name).toBe("Selena");
+              expect(child.star_count).toBe(0);
+              expect(child.parent_email).toBe("a@outlook.com");
+              expect(child.login_code).toBeGreaterThan(1000);
+            });
+        });
+        it("DELETE 204 child from parent account", () => {
+          return request(app).delete("/api/children/2").expect(204);
+        });
       });
     });
   });
@@ -109,7 +134,7 @@ describe("/api", () => {
               });
             });
         });
-        it.only("201 POST rewards by Child_id", () => {
+        it("201 POST reward by child_id", () => {
           return request(app)
             .post("/api/children/5/rewards")
             .send({ reward_description: "Go to movies", star_cost: 10 })
@@ -127,6 +152,11 @@ describe("/api", () => {
   describe("/tasks", () => {
     it("204 DELETE task by task_id", () => {
       return request(app).delete("/api/tasks/4").expect(204);
+    });
+  });
+  describe("/rewards", () => {
+    it("204 DELETE reward by reward_id", () => {
+      return request(app).delete("/api/rewards/4").expect(204);
     });
   });
 });

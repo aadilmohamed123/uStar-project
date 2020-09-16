@@ -1,11 +1,13 @@
 const {
   fetchChildrenByParent,
   fetchChildByChildId,
+  createChild,
+  removeChild,
 } = require("../models/children.models");
 
 exports.getChildrenByParent = (req, res) => {
-  const { email } = req.params;
-  fetchChildrenByParent(email).then((children) => {
+  const { parent_email } = req.params;
+  fetchChildrenByParent(parent_email).then((children) => {
     res.send({ children });
   });
 };
@@ -14,5 +16,20 @@ exports.getChildByChildId = (req, res) => {
   const { child_id } = req.params;
   fetchChildByChildId(child_id).then((child) => {
     res.send({ child: child[0] });
+  });
+};
+exports.postChild = (req, res) => {
+  const { parent_email } = req.params;
+  const { child_name } = req.body;
+
+  createChild(parent_email, child_name).then((child) => {
+    res.status(201).send({ child });
+  });
+};
+
+exports.deleteChild = (req, res) => {
+  const { child_id } = req.params;
+  removeChild(child_id).then(() => {
+    res.sendStatus(204);
   });
 };

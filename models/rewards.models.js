@@ -14,3 +14,11 @@ exports.createReward = (child_id, reward_description, star_cost) => {
       return postedReward;
     });
 };
+exports.removeReward = (reward_id) => {
+  return connection("rewards")
+    .where("reward_id", reward_id)
+    .del()
+    .then((res) => {
+      return res;
+    });
+};

@@ -5,6 +5,12 @@ app.use(express.json());
 
 app.use("/api", apiRouter);
 
+
+
+app.use((err, req, res, next) => {
+  if (err) console.log(err);
+});
+
 // app.listen(9090, () => {
 //   console.log("Lstening on 9090");
 // });
