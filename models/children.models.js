@@ -38,3 +38,13 @@ exports.removeChild = (child_id) => {
       });
   });
 };
+exports.updateChild = (child_id, star_inc) => {
+  return connection("children")
+    .where("child_id", child_id)
+    .increment("star_count", star_inc)
+    .returning("*")
+    .then((res) => {
+      const [updatedChild] = res;
+      return updatedChild;
+    });
+};

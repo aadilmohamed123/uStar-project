@@ -1,8 +1,10 @@
 const childrenRouter = require("express").Router();
 
 const {
+  patchChild,
   getChildByChildId,
   deleteChild,
+
 } = require("../controllers/children.controllers");
 const {
   getTasksByChildId,
@@ -13,7 +15,11 @@ const {
   postReward,
 } = require("../controllers/rewards.controllers");
 
-childrenRouter.route("/:child_id").get(getChildByChildId).delete(deleteChild);
+childrenRouter
+  .route("/:child_id")
+  .get(getChildByChildId)
+  .delete(deleteChild)
+  .patch(patchChild);
 childrenRouter.route("/:child_id/tasks").get(getTasksByChildId).post(postTask);
 
 childrenRouter

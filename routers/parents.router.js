@@ -4,6 +4,7 @@ const {
   deleteParent,
   getParentByEmail,
   postParent,
+  patchParent,
 } = require("../controllers/parents.controllers");
 const {
   getChildrenByParent,
@@ -12,9 +13,11 @@ const {
 
 parentsRouter.route("/").get(getAllParents).post(postParent);
 parentsRouter
-  .route("/:parent_email/")
-  .delete(deleteParent)
-  .get(getParentByEmail);
+  .route("/:parent_email")
+  .get(getParentByEmail)
+  .patch(patchParent)
+  .delete(deleteParent);
+
 parentsRouter
   .route("/:parent_email/children")
   .get(getChildrenByParent)

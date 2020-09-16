@@ -1,4 +1,5 @@
 const connection = require("../db/connection");
+const { updateChild } = require("./children.models");
 
 exports.fetchTasksByChildId = (id) => {
   return connection.select("*").from("tasks").where("child_id", id);
@@ -21,5 +22,15 @@ exports.removeTask = (task_id) => {
     .del()
     .then((res) => {
       return res;
+    });
+};
+exports.updateTask = (task_id, task_status) => {
+  return connection("tasks")
+    .where("task_id", task_id)
+    .update("task_status", task_status)
+    .returning("*")
+    .then((res) => {
+      const [updatedTask] = res;
+      return updatedTask;
     });
 };

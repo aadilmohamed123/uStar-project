@@ -2,6 +2,7 @@ const {
   fetchTasksByChildId,
   createTask,
   removeTask,
+  updateTask
 } = require("../models/tasks.models");
 
 exports.getTasksByChildId = (req, res) => {
@@ -24,4 +25,14 @@ exports.deleteTask = (req, res) => {
   removeTask(task_id).then(() => {
     res.sendStatus(204);
   });
+};
+exports.patchTask = (req, res, next) => {
+  const { task_id } = req.params;
+  const { task_status } = req.body;
+
+  updateTask(task_id, task_status)
+    .then((updatedTask) => {
+      res.status(200).send({ updatedTask });
+    })
+    .catch(next);
 };

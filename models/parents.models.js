@@ -38,3 +38,14 @@ exports.createParent = (parent_email, parent_name) => {
       return postedParent;
     });
 };
+
+exports.updateParent = (parent_email, parent_name) => {
+  return connection("parents")
+    .where("parent_email", parent_email)
+    .update("parent_name", parent_name)
+    .returning("*")
+    .then((res) => {
+      const [updatedParent] = res;
+      return updatedParent;
+    });
+};

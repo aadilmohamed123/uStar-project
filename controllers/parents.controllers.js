@@ -3,6 +3,7 @@ const {
   removeParent,
   fetchParentByEmail,
   createParent,
+  updateParent,
 } = require("../models/parents.models");
 
 exports.getAllParents = (req, res) => {
@@ -31,4 +32,14 @@ exports.postParent = (req, res) => {
   createParent(parent_email, parent_name).then((parent) => {
     res.status(201).send({ parent });
   });
+};
+exports.patchParent = (req, res, next) => {
+  const { parent_email } = req.params;
+  const { parent_name } = req.body;
+
+  updateParent(parent_email, parent_name)
+    .then((updatedParent) => {
+      res.status(200).send({ updatedParent });
+    })
+    .catch(next);
 };

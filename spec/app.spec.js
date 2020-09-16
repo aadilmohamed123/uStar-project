@@ -23,7 +23,7 @@ describe("/api", () => {
           });
         });
     });
-    it.only("201 POST parent ", () => {
+    it("201 POST parent ", () => {
       return request(app)
         .post("/api/parents/")
         .send({ parent_email: "g@outlook.com", parent_name: "g" })
@@ -60,6 +60,17 @@ describe("/api", () => {
                   expect(parent.parent_email).not.toBe("f@outlook.com");
                 });
               });
+          });
+      });
+      it("PATCH 200 - update parent name", () => {
+        return request(app)
+          .patch("/api/parents/a@outlook.com")
+          .send({ parent_name: "z" })
+          .expect(200)
+          .then((res) => {
+            const { updatedParent } = res.body;
+
+            expect(updatedParent.parent_name).toBe("z");
           });
       });
       describe("/children", () => {
@@ -117,6 +128,17 @@ describe("/api", () => {
               "parent_email",
               "star_count",
             ]);
+          });
+      });
+      it("PATCH 200 - update child star_count", () => {
+        return request(app)
+          .patch("/api/children/1")
+          .send({ star_inc: 1 })
+          .expect(200)
+          .then((res) => {
+            const { updatedChild } = res.body;
+
+            expect(updatedChild.star_count).toBe(3);
           });
       });
       describe("/tasks", () => {
@@ -184,8 +206,22 @@ describe("/api", () => {
     });
   });
   describe("/tasks", () => {
-    it("204 DELETE task by task_id", () => {
-      return request(app).delete("/api/tasks/4").expect(204);
+    describe("/:task_id", () => {
+      it("204 DELETE task by task_id", () => {
+        return request(app).delete("/api/tasks/4").expect(204);
+      });
+      it.only("PATCH 200 - update task status", () => {
+        return request(app)
+          .patch("/api/tasks/1")
+          .send({ task_status: "completed" })
+          .expect(200)
+          .then((res) => {
+            const { updatedTask } = res.body;
+    
+            expect(updatedTask.task_status).toBe("completed");
+          })
+          
+      });
     });
   });
   describe("/rewards", () => {

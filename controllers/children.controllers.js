@@ -3,6 +3,7 @@ const {
   fetchChildByChildId,
   createChild,
   removeChild,
+  updateChild
 } = require("../models/children.models");
 
 exports.getChildrenByParent = (req, res) => {
@@ -32,4 +33,14 @@ exports.deleteChild = (req, res) => {
   removeChild(child_id).then(() => {
     res.sendStatus(204);
   });
+};
+exports.patchChild = (req, res, next) => {
+  const { child_id } = req.params;
+  const { star_inc } = req.body;
+
+  updateChild(child_id, star_inc)
+    .then((updatedChild) => {
+      res.status(200).send({ updatedChild });
+    })
+    .catch(next);
 };
