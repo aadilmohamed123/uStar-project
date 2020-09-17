@@ -69,8 +69,7 @@ exports.updateChild = (child_id, star_inc) => {
       if (res.length === 0)
         return Promise.reject({
           status: 404,
-          msg:
-            "404 Error: Not found",
+          msg: "404 Error: Not found",
         });
 
       const [updatedChild] = res;
@@ -98,19 +97,15 @@ exports.fetchChildByLoginCode = (login_code) => {
 };
 
 const checkParentExists = (parent_email) => {
-  if (parent === undefined) {
-    return false;
-  } else {
-    return connection
-      .select("*")
-      .from("parents")
-      .where("parent_email", parent_email)
-      .then((rows) => {
-        if (rows.length !== 0) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-  }
+  return connection
+    .select("*")
+    .from("parents")
+    .where("parent_email", parent_email)
+    .then((rows) => {
+      if (rows.length !== 0) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 };
