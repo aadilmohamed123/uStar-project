@@ -9,7 +9,18 @@ exports.fetchChildrenByParent = (parent_email) => {
     .where("parent_email", parent_email);
 };
 exports.fetchChildByChildId = (id) => {
-  return connection.select("*").from("children").where("child_id", id);
+  return connection
+    .select("*")
+    .from("children")
+    .where("child_id", id)
+    .returning("*")
+    .then((res) => {
+      if (res.length === 0)
+        return Promise.reject({ status: 404, msg: "404 Error: Not found" });
+
+      const [child] = res;
+      return child;
+    });
 };
 exports.createChild = (parent_email, child_name) => {
   return connection
@@ -56,6 +67,13 @@ exports.fetchChildByLoginCode = (login_code) => {
     .where("login_code", login_code)
     .returning("*")
     .then((res) => {
+      if (res.length === 0)
+        return Promise.reject({
+          status: 404,
+          msg:
+            "404 Error: Not found, please check your number and try logging in again",
+        });
+
       const [child] = res;
       return child;
     });

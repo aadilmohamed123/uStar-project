@@ -83,7 +83,7 @@ describe("/api", () => {
             expect(updatedParent.parent_name).toBe("z");
           });
       });
-      it("404 Not found, parent email does not exist", () => {
+      it("404 Not found, parent email does not exist (get)", () => {
         return request(app)
           .get("/api/parents/xwyzs@outlook.com")
           .expect(404)
@@ -92,7 +92,7 @@ describe("/api", () => {
             expect(res.status).toBe(404);
           });
       });
-      it.only("404 Not found, parent email does not exist", () => {
+      it("404 Not found, parent email does not exist (delete)", () => {
         return request(app)
           .del("/api/parents/xwyzs@outlook.com")
           .expect(404)
@@ -101,7 +101,7 @@ describe("/api", () => {
             expect(res.status).toBe(404);
           });
       });
-      it("404 Not found, parent email does not exist", () => {
+      it("404 Not found, parent email does not exist (patch)", () => {
         return request(app)
           .patch("/api/parents/xwyzs@outlook.com")
           .send({ parent_name: "z" })
@@ -109,6 +109,17 @@ describe("/api", () => {
           .then((res) => {
             expect(res.body.msg).toBe("404 Error: Not found");
             expect(res.status).toBe(404);
+          });
+      });
+      it("Custom Err 403-forbbiden - deletes parent while child exists", () => {
+        return request(app)
+          .del("/api/parents/a@outlook.com")
+          .expect(403)
+          .then((res) => {
+            expect(res.body.msg).toBe(
+              "403 Error: please remove children from account first and try again"
+            );
+            expect(res.status).toBe(403);
           });
       });
       describe("/children", () => {
@@ -172,6 +183,18 @@ describe("/api", () => {
               });
           });
       });
+      it.only("404 ERR not found- Incorrect login", () => {
+        return request(app)
+          .get("/api/children/")
+          .send({ login_code: 139 })
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe(
+              "404 Error: Not found, please check your number and try logging in again"
+            );
+            expect(res.status).toBe(404);
+          });
+      });
     });
     describe("/:child_id", () => {
       it("200 GET child by child id", () => {
@@ -199,6 +222,15 @@ describe("/api", () => {
             const { updatedChild } = res.body;
 
             expect(updatedChild.star_count).toBe(3);
+          });
+      });
+      it("404 ERR not found- child does not exist", () => {
+        return request(app)
+          .get("/api/children/1000")
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
           });
       });
       describe("/tasks", () => {
