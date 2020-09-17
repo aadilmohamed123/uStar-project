@@ -12,7 +12,7 @@ app.use("/api", apiRouter);
 app.use(customErrorHandler);
 app.use(PSQLErrorHandler);
 app.all("*", (req, res, next) => {
-  res.status(404).send({ msg: "Error 404: Not found" });
+  res.status(404).send({ msg: "404 Error: Path Not found" });
 });
 
 // app.listen(9090, () => {
