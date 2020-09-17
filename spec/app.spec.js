@@ -8,6 +8,16 @@ describe("/api", () => {
   // beforeEach(() =>  jest.setTimeout(() => {}, 20000));
 
   afterAll(() => connection.destroy());
+  it("404 ERR misspelled url", () => {
+    return request(app)
+      .get("/api/childen")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("Error 404: Not found");
+        expect(res.status).toBe(404);
+      });
+  });
+
   describe("/parents", () => {
     it("200 GET list of parents (admin)", () => {
       return request(app)
@@ -34,7 +44,7 @@ describe("/api", () => {
           expect(parent.parent_name).toBe("g");
         });
     });
-    describe("/email", () => {
+    describe("/:email", () => {
       it("200 GET parent by email", () => {
         return request(app)
           .get("/api/parents/a@outlook.com")
@@ -71,6 +81,34 @@ describe("/api", () => {
             const { updatedParent } = res.body;
 
             expect(updatedParent.parent_name).toBe("z");
+          });
+      });
+      it("404 Not found, parent email does not exist", () => {
+        return request(app)
+          .get("/api/parents/xwyzs@outlook.com")
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
+          });
+      });
+      it.only("404 Not found, parent email does not exist", () => {
+        return request(app)
+          .del("/api/parents/xwyzs@outlook.com")
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
+          });
+      });
+      it("404 Not found, parent email does not exist", () => {
+        return request(app)
+          .patch("/api/parents/xwyzs@outlook.com")
+          .send({ parent_name: "z" })
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
           });
       });
       describe("/children", () => {
@@ -114,7 +152,7 @@ describe("/api", () => {
 
   describe("/children", () => {
     describe("/:login_code", () => {
-      it.only("200 GET child by login_code ", () => {
+      it("200 GET child by login_code ", () => {
         return request(app)
           .get("/api/children/5")
           .expect(200)

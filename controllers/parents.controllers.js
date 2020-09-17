@@ -6,16 +6,20 @@ const {
   updateParent,
 } = require("../models/parents.models");
 
-exports.getAllParents = (req, res) => {
-  fetchAllParents().then((parents) => {
-    res.send({ parents });
-  });
+exports.getAllParents = (req, res, next) => {
+  fetchAllParents()
+    .then((parents) => {
+      res.send({ parents });
+    })
+    .catch(next);
 };
-exports.getParentByEmail = (req, res) => {
+exports.getParentByEmail = (req, res, next) => {
   const { parent_email } = req.params;
-  fetchParentByEmail(parent_email).then((parent) => {
-    res.send({ parent: parent[0] });
-  });
+  fetchParentByEmail(parent_email)
+    .then((parent) => {
+      res.send({ parent });
+    })
+    .catch(next);
 };
 exports.deleteParent = (req, res, next) => {
   const { parent_email } = req.params;
@@ -26,12 +30,14 @@ exports.deleteParent = (req, res, next) => {
     .catch(next);
 };
 
-exports.postParent = (req, res) => {
+exports.postParent = (req, res, next) => {
   const { parent_email, parent_name } = req.body;
 
-  createParent(parent_email, parent_name).then((parent) => {
-    res.status(201).send({ parent });
-  });
+  createParent(parent_email, parent_name)
+    .then((parent) => {
+      res.status(201).send({ parent });
+    })
+    .catch(next);
 };
 exports.patchParent = (req, res, next) => {
   const { parent_email } = req.params;
