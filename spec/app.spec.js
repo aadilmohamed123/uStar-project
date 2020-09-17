@@ -13,7 +13,7 @@ describe("/api", () => {
       .get("/api/childen")
       .expect(404)
       .then((res) => {
-        expect(res.body.msg).toBe("Error 404: Not found");
+        expect(res.body.msg).toBe("404 Error: Path Not found");
         expect(res.status).toBe(404);
       });
   });
@@ -166,19 +166,16 @@ describe("/api", () => {
           return request(app).delete("/api/children/2").expect(204);
         });
 
-        //test passes, messes with test suite so commented out, run setup-dbs after running it
-        // it("404 GET children from parent that doesn't exist", () => {
-        //   jest.setTimeout(() => {
-        //     return request(app)
-        //       .get("/api/parents/gdwjhefg@outlook.com/children")
-        //       .expect(404)
-        //       .then((res) => {
-        //         expect(res.body.msg).toBe("404 Error: Not found");
-        //         expect(res.status).toBe(404);
-        //       });
-        //   }, 10000);
-        //   done();
-        // });
+        // test passes, messes with test suite so commented out, run setup-dbs after running it
+        it("404 GET children from parent that doesn't exist", () => {
+          return request(app)
+            .get("/api/parents/gdwjhefg@outlook.com/children")
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("404 Error: Not found");
+              expect(res.status).toBe(404);
+            });
+        });
       });
     });
   });
@@ -305,7 +302,45 @@ describe("/api", () => {
               expect(task.child_id).toBe(3);
             });
         });
+        it("404 GET Err, child does not exist", () => {
+          return request(app)
+            .get("/api/children/1000/tasks")
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("404 Error: Not found");
+              expect(res.status).toBe(404);
+            });
+        });
+        it("200 GET empty tasks array for child with no tasks", () => {
+          return request(app)
+            .get("/api/children/1/tasks")
+            .expect(200)
+            .then((res) => {
+              expect(res.body.tasks.length).toBe(0);
+            });
+        });
+        it("404 POST  task Err - child does not exist  ", () => {
+          return request(app)
+            .post("/api/children/1000/tasks")
+            .send({ task_description: "a task" })
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("404 Error: Child not found");
+              expect(res.status).toBe(404);
+            });
+        });
+        it("404 POST  reward Err - child does not exist  ", () => {
+          return request(app)
+            .post("/api/children/1000/rewards")
+            .send({ task_description: "a reward" })
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("404 Error: Child not found");
+              expect(res.status).toBe(404);
+            });
+        });
       });
+
       describe("/rewards", () => {
         it("200 GET rewards by child_id ", () => {
           return request(app)
@@ -335,6 +370,23 @@ describe("/api", () => {
               expect(reward.star_cost).toBe(10);
             });
         });
+        it.only("404 GET Err, child does not exist", () => {
+          return request(app)
+            .get("/api/children/1000/rewards")
+            .expect(404)
+            .then((res) => {
+              expect(res.body.msg).toBe("404 Error: Not found");
+              expect(res.status).toBe(404);
+            });
+        });
+        it.only("200 GET empty tasks array for child with no tasks", () => {
+          return request(app)
+            .get("/api/children/9/rewards")
+            .expect(200)
+            .then((res) => {
+              expect(res.body.rewards.length).toBe(0);
+            });
+        });
       });
     });
   });
@@ -354,11 +406,39 @@ describe("/api", () => {
             expect(updatedTask.task_status).toBe("completed");
           });
       });
+      it("404 PATCH Err - task does not exist  ", () => {
+        return request(app)
+          .patch("/api/tasks/10000")
+          .send({ task_status: "completed" })
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
+          });
+      });
+      it("404 DELETE Err - task does not exist  ", () => {
+        return request(app)
+          .del("/api/tasks/10000")
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
+          });
+      });
     });
   });
   describe("/rewards", () => {
     it("204 DELETE reward by reward_id", () => {
       return request(app).delete("/api/rewards/4").expect(204);
+    });
+    it("404 DELETE Err - task does not exist  ", () => {
+      return request(app)
+        .del("/api/rewards/10000")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("404 Error: Not found");
+          expect(res.status).toBe(404);
+        });
     });
   });
 });
