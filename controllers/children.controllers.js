@@ -20,7 +20,7 @@ exports.getChildByChildId = (req, res, next) => {
   const { child_id } = req.params;
   fetchChildByChildId(child_id)
     .then((child) => {
-      res.send({ child: child[0] });
+      res.send({ child });
     })
     .catch(next);
 };

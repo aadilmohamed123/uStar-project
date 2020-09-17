@@ -140,6 +140,14 @@ describe("/api", () => {
               });
             });
         });
+        it("200 GET empty children array from parent with no children", () => {
+          return request(app)
+            .get("/api/parents/f@outlook.com/children")
+            .expect(200)
+            .then((res) => {
+              expect(res.body.children.length).toBe(0);
+            });
+        });
         it("POST 201 child to parent account", () => {
           return request(app)
             .post("/api/parents/a@outlook.com/children")
@@ -157,6 +165,20 @@ describe("/api", () => {
         it("DELETE 204 child from parent account", () => {
           return request(app).delete("/api/children/2").expect(204);
         });
+
+        //test passes, messes with test suite so commented out, run setup-dbs after running it
+        // it("404 GET children from parent that doesn't exist", () => {
+        //   jest.setTimeout(() => {
+        //     return request(app)
+        //       .get("/api/parents/gdwjhefg@outlook.com/children")
+        //       .expect(404)
+        //       .then((res) => {
+        //         expect(res.body.msg).toBe("404 Error: Not found");
+        //         expect(res.status).toBe(404);
+        //       });
+        //   }, 10000);
+        //   done();
+        // });
       });
     });
   });
@@ -183,7 +205,7 @@ describe("/api", () => {
               });
           });
       });
-      it.only("404 ERR not found- Incorrect login", () => {
+      it("404 ERR not found- Incorrect login", () => {
         return request(app)
           .get("/api/children/")
           .send({ login_code: 139 })
@@ -224,9 +246,28 @@ describe("/api", () => {
             expect(updatedChild.star_count).toBe(3);
           });
       });
-      it("404 ERR not found- child does not exist", () => {
+      it("404 GET ERR not found- child does not exist", () => {
         return request(app)
           .get("/api/children/1000")
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
+          });
+      });
+      it("404 PATCH ERR not found- child does not exist", () => {
+        return request(app)
+          .patch("/api/children/1000")
+          .send({ star_inc: 1 })
+          .expect(404)
+          .then((res) => {
+            expect(res.body.msg).toBe("404 Error: Not found");
+            expect(res.status).toBe(404);
+          });
+      });
+      it("404 DELETE ERR not found- child does not exist", () => {
+        return request(app)
+          .delete("/api/children/1000")
           .expect(404)
           .then((res) => {
             expect(res.body.msg).toBe("404 Error: Not found");

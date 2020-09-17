@@ -3,10 +3,21 @@ const { fetchRewardsByChildId, removeReward } = require("./rewards.models");
 const { fetchTasksByChildId, removeTask } = require("./tasks.models");
 
 exports.fetchChildrenByParent = (parent_email) => {
-  return connection
+  const children = connection
     .select("*")
     .from("children")
-    .where("parent_email", parent_email);
+    .where("parent_email", parent_email)
+    .returning("*");
+
+  return Promise.all([children, checkParentExists(parent_email)]).then(
+    (returningRows) => {
+      const [array, parentExists] = returningRows;
+
+      return parentExists
+        ? array
+        : Promise.reject({ status: 404, msg: "404 Error: Not found" });
+    }
+  );
 };
 exports.fetchChildByChildId = (id) => {
   return connection
@@ -55,6 +66,13 @@ exports.updateChild = (child_id, star_inc) => {
     .increment("star_count", star_inc)
     .returning("*")
     .then((res) => {
+      if (res.length === 0)
+        return Promise.reject({
+          status: 404,
+          msg:
+            "404 Error: Not found",
+        });
+
       const [updatedChild] = res;
       return updatedChild;
     });
@@ -77,4 +95,22 @@ exports.fetchChildByLoginCode = (login_code) => {
       const [child] = res;
       return child;
     });
+};
+
+const checkParentExists = (parent_email) => {
+  if (parent === undefined) {
+    return false;
+  } else {
+    return connection
+      .select("*")
+      .from("parents")
+      .where("parent_email", parent_email)
+      .then((rows) => {
+        if (rows.length !== 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+  }
 };
