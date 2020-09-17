@@ -11,12 +11,7 @@ module.exports = [
     child_name: "George",
     parent_email: "d@outlook.com",
   },
-  {
-    reward_description: "football game",
-    star_cost: 12,
-    child_name: "Simon",
-    parent_email: "e@outlook.com",
-  },
+
   {
     reward_description: "Zoo",
     star_cost: 11,
