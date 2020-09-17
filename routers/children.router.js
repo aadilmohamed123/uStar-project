@@ -14,17 +14,28 @@ const {
   getRewardsByChildId,
   postReward,
 } = require("../controllers/rewards.controllers");
+const { handle405Errors } = require("../error_handlers");
 
 childrenRouter
   .route("/:child_id")
   .get(getChildByChildId)
   .delete(deleteChild)
-  .patch(patchChild);
-childrenRouter.route("/:child_id/tasks").get(getTasksByChildId).post(postTask);
+  .patch(patchChild)
+  .all(handle405Errors);
+
+childrenRouter
+  .route("/:child_id/tasks")
+  .get(getTasksByChildId)
+  .post(postTask)
+  .all(handle405Errors);
 
 childrenRouter
   .route("/:child_id/rewards")
   .get(getRewardsByChildId)
   .post(postReward);
-childrenRouter.route("/").get(getChildByLoginCode);
+childrenRouter.route("/").get(getChildByLoginCode).all(handle405Errors);
+
+
+
+
 module.exports = childrenRouter;

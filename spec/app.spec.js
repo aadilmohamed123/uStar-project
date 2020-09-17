@@ -181,6 +181,14 @@ describe("/api", () => {
   });
 
   describe("/children", () => {
+    it.only("405 - Method Not Allowed", () => {
+      return request(app)
+        .post("/api/children/")
+        .expect(405)
+        .then((res) => {
+          expect(res.body.msg).toBe("Method Not Allowed");
+        });
+    });
     describe("/:login_code", () => {
       it("200 GET child by login_code ", () => {
         return request(app)
@@ -370,7 +378,7 @@ describe("/api", () => {
               expect(reward.star_cost).toBe(10);
             });
         });
-        it.only("404 GET Err, child does not exist", () => {
+        it("404 GET Err, child does not exist", () => {
           return request(app)
             .get("/api/children/1000/rewards")
             .expect(404)
@@ -379,7 +387,7 @@ describe("/api", () => {
               expect(res.status).toBe(404);
             });
         });
-        it.only("200 GET empty tasks array for child with no tasks", () => {
+        it("200 GET empty tasks array for child with no tasks", () => {
           return request(app)
             .get("/api/children/9/rewards")
             .expect(200)

@@ -16,3 +16,12 @@ exports.PSQLErrorHandler = (err, req, res, next) => {
         });
   else next(err);
 };
+
+
+
+exports.handle405Errors = (req, res, next) => {
+  res.status(405).send({ msg: "Method Not Allowed" });
+};
+exports.handleServerErrors = (err, req, res, next) => {
+  res.status(500).send({ msg: "Internal Server Error" });
+};
