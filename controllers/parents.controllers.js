@@ -15,11 +15,12 @@ exports.getAllParents = (req, res, next) => {
 };
 exports.getParentByEmail = (req, res, next) => {
   const { parent_email } = req.params;
+    
   fetchParentByEmail(parent_email)
     .then((parent) => {
       res.send({ parent });
     })
-    .catch(next);
+    .catch(next)
 };
 exports.deleteParent = (req, res, next) => {
   const { parent_email } = req.params;

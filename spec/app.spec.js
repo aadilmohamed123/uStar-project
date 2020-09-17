@@ -122,6 +122,7 @@ describe("/api", () => {
             expect(res.status).toBe(403);
           });
       });
+
       describe("/children", () => {
         it("200 GET list of children by parent", () => {
           return request(app)
@@ -181,7 +182,7 @@ describe("/api", () => {
   });
 
   describe("/children", () => {
-    it.only("405 - Method Not Allowed", () => {
+    it("405 - Method Not Allowed", () => {
       return request(app)
         .post("/api/children/")
         .expect(405)
@@ -251,6 +252,14 @@ describe("/api", () => {
             expect(updatedChild.star_count).toBe(3);
           });
       });
+      it("400 BAD RESQUEST GET invalid child_id", () => {
+        return request(app)
+          .get("/api/children/hfuekwf")
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).toBe("400 - Bad Request");
+          });
+      });
       it("404 GET ERR not found- child does not exist", () => {
         return request(app)
           .get("/api/children/1000")
@@ -310,6 +319,15 @@ describe("/api", () => {
               expect(task.child_id).toBe(3);
             });
         });
+        it("400 POST new task by child_id", () => {
+          return request(app)
+            .post("/api/children/3/tasks")
+            .send({ stars_worth: 20 })
+            .expect(400)
+            .then((res) => {
+              expect(res.body.msg).toBe("400 - Bad Request");
+            });
+        });
         it("404 GET Err, child does not exist", () => {
           return request(app)
             .get("/api/children/1000/tasks")
@@ -343,7 +361,7 @@ describe("/api", () => {
             .send({ task_description: "a reward" })
             .expect(404)
             .then((res) => {
-              expect(res.body.msg).toBe("404 Error: Child not found");
+              expect(res.body.msg).toBe("404 Error: Not Found");
               expect(res.status).toBe(404);
             });
         });
@@ -376,6 +394,15 @@ describe("/api", () => {
               expect(reward.child_id).toBe(5);
               expect(reward.reward_description).toBe("Go to movies");
               expect(reward.star_cost).toBe(10);
+            });
+        });
+        it("400 POST Err - missing reward_description  ", () => {
+          return request(app)
+            .post("/api/children/2/rewards")
+            .send({ stars_cost: 7 })
+            .expect(400)
+            .then((res) => {
+              expect(res.body.msg).toBe("400 - Bad Request");
             });
         });
         it("404 GET Err, child does not exist", () => {
@@ -414,6 +441,15 @@ describe("/api", () => {
             expect(updatedTask.task_status).toBe("completed");
           });
       });
+      it("400 PATCH Err - invalid task_status  ", () => {
+        return request(app)
+          .patch("/api/tasks/4")
+          .send({ task_status: "sdcfvgv" })
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).toBe("400 - Bad Request");
+          });
+      });
       it("404 PATCH Err - task does not exist  ", () => {
         return request(app)
           .patch("/api/tasks/10000")
@@ -439,7 +475,8 @@ describe("/api", () => {
     it("204 DELETE reward by reward_id", () => {
       return request(app).delete("/api/rewards/4").expect(204);
     });
-    it("404 DELETE Err - task does not exist  ", () => {
+
+    it("404 DELETE Err - reward does not exist  ", () => {
       return request(app)
         .del("/api/rewards/10000")
         .expect(404)

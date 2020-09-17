@@ -49,7 +49,10 @@ exports.updateTask = (task_id, task_status) => {
       if (res.length === 0)
         return Promise.reject({ status: 404, msg: "404 Error: Not found" });
       const [updatedTask] = res;
-      return updatedTask;
+
+      return task_status !== ("completed" || "pending" || "outstanding")
+        ? Promise.reject({ status: 400, msg: "400 - Bad Request" })
+        : updatedTask;
     });
 };
 
