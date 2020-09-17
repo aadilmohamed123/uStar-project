@@ -3,7 +3,8 @@ const {
   fetchChildByChildId,
   createChild,
   removeChild,
-  updateChild
+  updateChild,
+  fetchChildByLoginCode,
 } = require("../models/children.models");
 
 exports.getChildrenByParent = (req, res) => {
@@ -43,4 +44,11 @@ exports.patchChild = (req, res, next) => {
       res.status(200).send({ updatedChild });
     })
     .catch(next);
+};
+
+exports.getChildByLoginCode = (req, res) => {
+  const { login_code } = req.body;
+  fetchChildByLoginCode(login_code).then((child) => {
+    res.send({ child });
+  });
 };

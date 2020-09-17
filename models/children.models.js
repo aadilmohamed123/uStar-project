@@ -48,3 +48,15 @@ exports.updateChild = (child_id, star_inc) => {
       return updatedChild;
     });
 };
+
+exports.fetchChildByLoginCode = (login_code) => {
+  return connection
+    .select("*")
+    .from("children")
+    .where("login_code", login_code)
+    .returning("*")
+    .then((res) => {
+      const [child] = res;
+      return child;
+    });
+};

@@ -113,6 +113,28 @@ describe("/api", () => {
   });
 
   describe("/children", () => {
+    describe("/:login_code", () => {
+      it.only("200 GET child by login_code ", () => {
+        return request(app)
+          .get("/api/children/5")
+          .expect(200)
+          .then((res) => {
+            const { child } = res.body;
+            const { login_code } = child;
+            return login_code;
+          })
+          .then((login_code) => {
+            return request(app)
+              .get("/api/children/")
+              .send({ login_code })
+              .expect(200)
+              .then((res) => {
+                const { child } = res.body;
+                expect(child.child_id).toBe(5);
+              });
+          });
+      });
+    });
     describe("/:child_id", () => {
       it("200 GET child by child id", () => {
         return request(app)
@@ -210,17 +232,16 @@ describe("/api", () => {
       it("204 DELETE task by task_id", () => {
         return request(app).delete("/api/tasks/4").expect(204);
       });
-      it.only("PATCH 200 - update task status", () => {
+      it("PATCH 200 - update task status", () => {
         return request(app)
           .patch("/api/tasks/1")
           .send({ task_status: "completed" })
           .expect(200)
           .then((res) => {
             const { updatedTask } = res.body;
-    
+
             expect(updatedTask.task_status).toBe("completed");
-          })
-          
+          });
       });
     });
   });

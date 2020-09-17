@@ -4,7 +4,7 @@ const {
   patchChild,
   getChildByChildId,
   deleteChild,
-
+  getChildByLoginCode,
 } = require("../controllers/children.controllers");
 const {
   getTasksByChildId,
@@ -26,5 +26,5 @@ childrenRouter
   .route("/:child_id/rewards")
   .get(getRewardsByChildId)
   .post(postReward);
-
+childrenRouter.route("/").get(getChildByLoginCode);
 module.exports = childrenRouter;
