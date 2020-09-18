@@ -14,15 +14,15 @@ const customConfig = {
   development: {
     connection: {
       database: "ustar",
-      user: "shalom",
-      password: "pass",
+      user: "aadilmohamed123",
+      password: "password",
     },
   },
   test: {
     connection: {
       database: "ustar_test",
-      user: "shalom",
-      password: "pass",
+      user: "aadilmohamed123",
+      password: "password",
     },
   },
   production: {
