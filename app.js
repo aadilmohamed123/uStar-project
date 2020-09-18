@@ -23,7 +23,4 @@ app.use(handle405Errors);
 app.use(handleServerErrors);
 const { PORT = 9090 } = process.env;
 
-app.listen(PORT, () => {
-  console.log("Lstening on 9090");
-});
 module.exports = app;
