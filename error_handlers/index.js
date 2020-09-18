@@ -14,7 +14,9 @@ exports.PSQLErrorHandler = (err, req, res, next) => {
       42703: { status: 400, msg: "Column Does Not Exist" },
       23502: { status: 404, msg: "404 Error: Not Found" },
     };
-    err.column === "reward_description" || err.column === "task_description"
+    err.column === "reward_description" ||
+    err.column === "task_description" ||
+    err.table === "parents"
       ? err.length === 216
         ? (psqlErrors[23502] = { status: 404, msg: "404 Error: Not Found" })
         : (psqlErrors[23502] = { status: 400, msg: "400 - Bad Request" })

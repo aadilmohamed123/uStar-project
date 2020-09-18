@@ -122,6 +122,15 @@ describe("/api", () => {
             expect(res.status).toBe(403);
           });
       });
+      it("400 Bad request Post err, parent_email or parent_name missing", () => {
+        return request(app)
+          .post("/api/parents/")
+          .expect(400)
+          .then((res) => {
+            expect(res.body.msg).toBe("400 - Bad Request");
+            expect(res.status).toBe(400);
+          });
+      });
 
       describe("/children", () => {
         it("200 GET list of children by parent", () => {
@@ -250,6 +259,17 @@ describe("/api", () => {
             const { updatedChild } = res.body;
 
             expect(updatedChild.star_count).toBe(3);
+          });
+      });
+      it("PATCH 200 - change child name", () => {
+        return request(app)
+          .patch("/api/children/1")
+          .send({ child_name: "johnny" })
+          .expect(200)
+          .then((res) => {
+            const { updatedChild } = res.body;
+
+            expect(updatedChild.child_name).toBe("johnny");
           });
       });
       it("400 BAD RESQUEST GET invalid child_id", () => {
