@@ -11,9 +11,9 @@ app.use(express.json());
 
 app.use("/api", apiRouter);
 
-// app.use((err, req, res, next) => {
-//   if (err) console.log(err), "ERROR HERE";
-// });
+app.use((err, req, res, next) => {
+  if (err) console.log(err), "ERROR HERE";
+});
 app.all("*", (req, res, next) => {
   res.status(404).send({ msg: "404 Error: Path Not found" });
 });
