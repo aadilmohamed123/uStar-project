@@ -24,19 +24,15 @@ exports.removeParent = (parent_email) => {
   // });
 };
 exports.fetchParentByEmail = (parent_email) => {
-   
   return connection
     .select("*")
     .from("parents")
     .where("parent_email", parent_email)
     .returning("*")
     .then((res) => {
-   
       if (res.length === 0) {
-        if(res.s)
-        return Promise.reject({ status: 404, msg: "404 Error: Not found" })
-      }
-      else {
+        return Promise.reject({ status: 404, msg: "404 Error: Not found" });
+      } else {
         const [parent] = res;
         return parent;
       }
