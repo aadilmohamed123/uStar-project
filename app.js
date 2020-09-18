@@ -21,8 +21,9 @@ app.use(customErrorHandler);
 app.use(PSQLErrorHandler);
 app.use(handle405Errors);
 app.use(handleServerErrors);
+const { PORT = 9090 } = process.env;
 
-// app.listen(9090, () => {
-//   console.log("Lstening on 9090");
-// });
+app.listen(PORT, () => {
+  console.log("Lstening on 9090");
+});
 module.exports = app;
