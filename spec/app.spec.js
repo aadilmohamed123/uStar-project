@@ -450,7 +450,7 @@ describe("/api", () => {
       it("204 DELETE task by task_id", () => {
         return request(app).delete("/api/tasks/4").expect(204);
       });
-      it("PATCH 200 - update task status", () => {
+      it.only("PATCH 200 - update task status", () => {
         return request(app)
           .patch("/api/tasks/1")
           .send({ task_status: "completed" })
@@ -459,6 +459,27 @@ describe("/api", () => {
             const { updatedTask } = res.body;
 
             expect(updatedTask.task_status).toBe("completed");
+          });
+      });
+      it.only("PATCH 200, automatically updates child star_count by star_worth of task", () => {
+        return request(app)
+          .patch("/api/tasks/1")
+          .send({ task_status: "completed" })
+          .expect(200)
+          .then((res) => {
+            const { updatedTask } = res.body;
+
+            expect(updatedTask.task_status).toBe("completed");
+            return updatedTask;
+          })
+          .then((res) => {
+            const { stars_worth, child_id } = res;
+            return request(app)
+              .get(`/api/children/${child_id}/`)
+              .expect(200)
+              .then((res) => {
+                expect(res.body.child.star_count).toBe(2);
+              });
           });
       });
       it("400 PATCH Err - invalid task_status  ", () => {
