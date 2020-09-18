@@ -45,9 +45,9 @@ exports.deleteChild = (req, res, next) => {
 };
 exports.patchChild = (req, res, next) => {
   const { child_id } = req.params;
-  const { star_inc } = req.body;
+  const { star_inc, child_name } = req.body;
 
-  updateChild(child_id, star_inc)
+  updateChild(child_id, star_inc, child_name)
     .then((updatedChild) => {
       res.status(200).send({ updatedChild });
     })

@@ -60,10 +60,16 @@ exports.removeChild = (child_id) => {
       });
   });
 };
-exports.updateChild = (child_id, star_inc) => {
+
+exports.updateChild = (child_id, star_inc, child_name) => {
   return connection("children")
     .where("child_id", child_id)
-    .increment("star_count", star_inc)
+    .modify((input) => {
+      if (star_inc) input.increment("star_count", star_inc);
+    })
+    .modify((input) => {
+      if (child_name) input.update({ child_name });
+    })
     .returning("*")
     .then((res) => {
       if (res.length === 0)
