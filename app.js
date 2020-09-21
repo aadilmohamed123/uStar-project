@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const apiRouter = require("./routers/api.router");
 const {
   customErrorHandler,
@@ -7,6 +8,8 @@ const {
   handle405Errors,
   handleServerErrors,
 } = require("./error_handlers");
+
+app.use(cors());
 app.use(express.json());
 
 app.use("/api", apiRouter);
@@ -21,6 +24,5 @@ app.use(customErrorHandler);
 app.use(PSQLErrorHandler);
 app.use(handle405Errors);
 app.use(handleServerErrors);
-const { PORT = 9090 } = process.env;
 
 module.exports = app;
