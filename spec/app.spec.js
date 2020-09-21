@@ -494,7 +494,7 @@ describe("/api", () => {
             expect(updatedTask.task_status).toBe("pending");
           });
       });
-      it.("PATCH 200, automatically updates child star_count by star_worth of task", () => {
+      it("PATCH 200, automatically updates child star_count by star_worth of task", () => {
         return request(app)
           .patch("/api/tasks/1")
           .send({ task_status: "completed" })
