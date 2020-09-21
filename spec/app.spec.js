@@ -56,8 +56,8 @@ describe("/api", () => {
           });
       });
       xit("DELETE 204 parent by email", () => {
-      // only when children of parent are removed
-        //fails due to slow async  
+        // only when children of parent are removed
+        //fails due to slow async
         return request(app)
           .delete("/api/parents/f@outlook.com")
           .expect(204)
@@ -71,11 +71,10 @@ describe("/api", () => {
                 });
               });
           });
-      }); 
-     
+      });
 
       xit("DELETE 204 parent by email and removes children accounts", () => {
-         //fails due to slow async
+        //fails due to slow async
         return request(app)
           .delete("/api/parents/a@outlook.com")
           .expect(204)
@@ -495,7 +494,7 @@ describe("/api", () => {
             expect(updatedTask.task_status).toBe("pending");
           });
       });
-      it("PATCH 200, automatically updates child star_count by star_worth of task", () => {
+      it.("PATCH 200, automatically updates child star_count by star_worth of task", () => {
         return request(app)
           .patch("/api/tasks/1")
           .send({ task_status: "completed" })
