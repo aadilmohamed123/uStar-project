@@ -180,7 +180,7 @@ describe("/api", () => {
               expect(res.body.children.length).toBe(0);
             });
         });
-        it("POST 201 child to parent account", () => {
+        it.only("POST 201 child to parent account", () => {
           return request(app)
             .post("/api/parents/a@outlook.com/children")
             .send({ child_name: "Selena" })
@@ -234,8 +234,7 @@ describe("/api", () => {
           })
           .then((login_code) => {
             return request(app)
-              .get("/api/children/")
-              .send({ login_code })
+              .get(`/api/login_code/${login_code}`)
               .expect(200)
               .then((res) => {
                 const { child } = res.body;
@@ -245,8 +244,7 @@ describe("/api", () => {
       });
       it("404 ERR not found- Incorrect login", () => {
         return request(app)
-          .get("/api/children/")
-          .send({ login_code: 139 })
+          .get("/api/login_code/139")
           .expect(404)
           .then((res) => {
             expect(res.body.msg).toBe(
