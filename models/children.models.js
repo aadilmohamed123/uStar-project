@@ -1,6 +1,7 @@
 const connection = require("../db/connection");
 const { fetchRewardsByChildId, removeReward } = require("./rewards.models");
 const { fetchTasksByChildId, removeTask } = require("./tasks.models");
+const { randNumFunc } = require("../utils/utils");
 
 exports.fetchChildrenByParent = (parent_email) => {
   const children = connection
@@ -35,11 +36,12 @@ exports.fetchChildByChildId = (id) => {
 };
 exports.createChild = (parent_email, child_name) => {
   return connection
-    .insert({ parent_email, child_name })
+    .insert({ parent_email, child_name, login_code: randNumFunc() })
     .into("children")
     .returning("*")
     .then((res) => {
       const [postedChild] = res;
+
       return postedChild;
     });
 };
@@ -80,25 +82,6 @@ exports.updateChild = (child_id, star_inc, child_name) => {
 
       const [updatedChild] = res;
       return updatedChild;
-    });
-};
-
-exports.fetchChildByLoginCode = (login_code) => {
-  return connection
-    .select("*")
-    .from("children")
-    .where("login_code", login_code)
-    .returning("*")
-    .then((res) => {
-      if (res.length === 0)
-        return Promise.reject({
-          status: 404,
-          msg:
-            "404 Error: Not found, please check your number and try logging in again",
-        });
-
-      const [child] = res;
-      return child;
     });
 };
 
