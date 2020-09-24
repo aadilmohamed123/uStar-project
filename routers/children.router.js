@@ -33,9 +33,5 @@ childrenRouter
   .route("/:child_id/rewards")
   .get(getRewardsByChildId)
   .post(postReward);
-childrenRouter.route("/").get(getChildByLoginCode).all(handle405Errors);
-
-
-
-
+childrenRouter.route("/").all(handle405Errors);
 module.exports = childrenRouter;

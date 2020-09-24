@@ -53,12 +53,3 @@ exports.patchChild = (req, res, next) => {
     })
     .catch(next);
 };
-
-exports.getChildByLoginCode = (req, res, next) => {
-  const { login_code } = req.body;
-  fetchChildByLoginCode(login_code)
-    .then((child) => {
-      res.send({ child });
-    })
-    .catch(next);
-};
